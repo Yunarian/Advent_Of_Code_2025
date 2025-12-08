@@ -6,9 +6,8 @@ public class Day2 {
     public static void main(String[] args) {
         ArrayList<String> line = Utility.getFileData("Data/Day2");
         String remaining = line.get(0);
-        part1(remaining);
-
-        
+        // part1(remaining);
+        System.out.println(part2(remaining));
     }
 
 
@@ -58,6 +57,7 @@ public class Day2 {
         long end = -1;
         long sum = 0;
 
+        // for each range
         while (remaining.length() > 0) {
             // sets the start and end of the nested for loop
             if (remaining.substring(0,1).equals(",")) {
@@ -70,17 +70,40 @@ public class Day2 {
                 end = Long.parseLong(remaining.substring(remaining.indexOf("-") + 1));
             }
 
+            // for every integer between the range of the start and end, inclusive
             for (long i = start; i <= end; i++) {
-                String Stringi = "" + i;
-                
+                sum += part2InvalidId("" + i);
             }
 
             if (remaining.indexOf(",") != -1) {
                 remaining = remaining.substring(remaining.indexOf(","));
             } else {
                 break;
-            }
+            }   
         }
         return sum;
+    }
+
+    //calculates if a given input is an invalid id as per day 2's criteria
+    public static long part2InvalidId(String input) {
+        //This for loop checks if the string is entirely made up of:
+        //the first digit repeated, 
+        //the first and second digit repeated,
+        //the first, second, and third digit repeated,
+        //etc.
+        for (int i = 1; i < input.length() / 2 + 1; i++) {       
+            String inputCopy = input;
+            String comparison = input.substring(0, i);
+            
+            while (inputCopy.length() >= i  && inputCopy.substring(0, i).equals(comparison)) {
+                inputCopy = inputCopy.substring(i);
+            }
+
+            if (inputCopy.length() == 0) {
+                return Long.parseLong(input);
+            }
+        }
+
+        return 0;
     }
 }
